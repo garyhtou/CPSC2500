@@ -2,94 +2,94 @@
 
 # ===== CODE =====
 
-              lli r3 0  # data array element counter
-              in r1  # user input (first input)
+                lli r3 0  # data array element counter
+                in r1  # user input (first input)
 
-              # check if the input is less than zero
-              bez r1 &START  # Jump if the number is equal or greater than zero
-              bgz r1 &START
+                # check if the input is less than zero
+                bez r1 &START  # Jump if the number is equal or greater than zero
+                bgz r1 &START
 
-              # If the jump above was not made, the input number is less than zero
-              lli r2 0
-              out r2  # output zero
-              .halt
+                # If the jump above was not made, the input number is less than zero
+                lli r2 0
+                out r2  # output zero
+                .halt
 
-              # Set up array information and save the first element
-START:        lli r2 &ARR  # save array starting memory address
-              lui r2 &ARR
-              sw r1 r2 0  # index zero, because it's the first element
-              addi r2 r2 1  # increment the index
-              addi r3 r3 1  # increment the array element counter
+                # Set up array information and save the first element
+START:          lli r2 &ARR  # save array starting memory address
+                lui r2 &ARR
+                sw r1 r2 0  # index zero, because it's the first element
+                addi r2 r2 1  # increment the index
+                addi r3 r3 1  # increment the array element counter
 
-              # Loop for collecting additional elements
-INPUT:        in r1
-              bez r1 &INPUTCONT  # Continue if the input was zero or greater
-              bgz r1 &INPUTCONT
-              bez r0 &CALC  # Since the input was not >= 0, it is < 0. Jump to the calculation
-INPUTCONT:    sw r1 r2 0 # Save the input for the current array index
-              addi r2 r2 1  # increment the index
-              addi r3 r3 1  # increment the array element counter
-              bez r0 &INPUT  # Jump to the input again
+                # Loop for collecting additional elements
+INPUT:          in r1
+                bez r1 &INPUTCONT  # Continue if the input was zero or greater
+                bgz r1 &INPUTCONT
+                bez r0 &CALC  # Since the input was not >= 0, it is < 0. Jump to the calculation
+INPUTCONT:      sw r1 r2 0 # Save the input for the current array index
+                addi r2 r2 1  # increment the index
+                addi r3 r3 1  # increment the array element counter
+                bez r0 &INPUT  # Jump to the input again
 
-              # Find the five smallest numbers in the array
-CALC:         # r3 contains the number of array elements
-              lli r2 &ARR  # data array starting memory address
-              lui r2 &ARR
-              lli r4 5  # max elements to print
-              sub r1 r4 r3  # number of elements shy of max elements to print (5)
-              bgz r1 &LESSTHANFIVE  # Jump if there are less than 5 elements
+                # Find the five smallest numbers in the array
+CALC:           # r3 contains the number of array elements
+                lli r2 &ARR  # data array starting memory address
+                lui r2 &ARR
+                lli r4 5  # max elements to print
+                sub r1 r4 r3  # number of elements shy of max elements to print (5)
+                bgz r1 &LESSTHANFIVE  # Jump if there are less than 5 elements
 
-              # If the jump above was not made, there are 5 or more elements
-              #   r2 contains the data array starting memory address
-              #   r3 contains the number of elements
-              lli r1 &RESULT  # result array starting memory address
-              lui r1 &RESULT
-              
-              # Find and store the 5 smallest elements in the results array
-FINDLOOP:     lw r4 r2 0  # load the first array element
-              lli r7 0  # array index counter
-FINDLOOPNEXT: sub r5 r7 r3  # NEGATIVE number of loops left
+                # If the jump above was not made, there are 5 or more elements
+                #   r2 contains the data array starting memory address
+                #   r3 contains the number of elements
+                lli r1 &RESULT  # result array starting memory address
+                lui r1 &RESULT
 
-              lw r5 r2 0  # load the current array element
-              bez r5 &FINDLOOPCONT  # Continue if element was not already removed (-1)
-              bgz r5 &FINDLOOPCONT
+                # Find and store the 5 smallest elements in the results array
+FINDLOOP:       lw r4 r2 0  # load the first array element
+                lli r7 0  # array index counter
+FINDLOOPNEXT:   sub r5 r7 r3  # NEGATIVE number of loops left
 
-              # If the code is here, the element was already removed. So, we skip the current element
-              addi r2 r2 1  # increment the current array element
-              addi r7 r7 1  # increment the array index counter
-              bez r0 &FINDLOOPNEXT  # Jump to finding the next element
-FINDLOOPCONT: sub r6 r4 r5  # smallest num - current num. If this is positive, current num is the new smallest num
-              bez r6 &FOUNDSMALL
-              addi r2 r2 1  # increment the current array element
-              addi r7 r7 1  # increment the array index counter
-              bez r0 &FINDLOOPNEXT  # Jump to finding the next element
-FOUNDSMALL:   ####
+                lw r5 r2 0  # load the current array element
+                bez r5 &FINDLOOPCONT  # Continue if element was not already removed (-1)
+                bgz r5 &FINDLOOPCONT
 
-
-FOUNDALL:     ####
+                # If the code is here, the element was already removed. So, we skip the current element
+                addi r2 r2 1  # increment the current array element
+                addi r7 r7 1  # increment the array index counter
+                bez r0 &FINDLOOPNEXT  # Jump to finding the next element
+FINDLOOPCONT:   sub r6 r4 r5  # smallest num - current num. If this is positive, current num is the new smallest num
+                bez r6 &FOUNDSMALL
+                addi r2 r2 1  # increment the current array element
+                addi r7 r7 1  # increment the array index counter
+                bez r0 &FINDLOOPNEXT  # Jump to finding the next element
+FOUNDSMALL:     ####
 
 
-              # out results
-              .halt
+FOUNDALL:       ####
 
 
-              # r3 contains the number of array elements
-LESSTHANFIVE: lli r1 0  # printing loop counter
-LTFLOOP:      lw r4 r2  # load current element
-              out r4  # output the current element
-              addi r1 r1 1  # increment the loop counter
-              addi r2 r2 1  # increment the array element memory address
-              sub r5 r3 r1  # number of loops left
-              bgz r5 &LTFLOOP  # Jump to next iteration of loop if there are > 0 loops left
-              .halt  # stop program if there are no printing loops left
+                # out results
+                .halt
+
+
+                # r3 contains the number of array elements
+LESSTHANFIVE:   lli r1 0  # printing loop counter
+LTFLOOP:        lw r4 r2  # load current element
+                out r4  # output the current element
+                addi r1 r1 1  # increment the loop counter
+                addi r2 r2 1  # increment the array element memory address
+                sub r5 r3 r1  # number of loops left
+                bgz r5 &LTFLOOP  # Jump to next iteration of loop if there are > 0 loops left
+                .halt  # stop program if there are no printing loops left
 
 # ===== DATA =====
 
-RESULT:       .fill -1  # index 0
-              .fill -1  # index 1
-              .fill -1  # index 2
-              .fill -1  # index 3
-              .fill -1  # index 4
+RESULT:         .fill -1  # index 0
+                .fill -1  # index 1
+                .fill -1  # index 2
+                .fill -1  # index 3
+                .fill -1  # index 4
 
-# Grow data array. Do not place variables after this
-ARR:          .fill 0
+# Growing data array. Do not place variables after this
+ARR:            .fill 0

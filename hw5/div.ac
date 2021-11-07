@@ -37,11 +37,12 @@ EXCESSDIV:      addi r3 r3 -1  # the quotient was in the previous loop iteration
 
 
 
+
 # === MULTIPLICATION FUNCTION ===
 # r3: multiplier
 # r4: product (output)
 # r5: counter
-MULTIPLYSTART:	lli r4 0  # Set output to zero
+MULTIPLYSTART:  lli r4 0  # Set output to zero
                 lli r5 0  # Set counter to zero
 MULTIPLYLOOP:   add r4 r4 r2  # add multiplicand (denominator) to output
                 addi r5 r5 1  # increment counter
@@ -49,17 +50,14 @@ MULTIPLYLOOP:   add r4 r4 r2  # add multiplicand (denominator) to output
                 bez r7 &MULTIPLYEND  # if counter reaches multiplier, jump to end of loop
                 bez r0 &MULTIPLYLOOP  # unconditional jump to loop if end loop condition not yet (counter < multiplier)
                 # output is in r4
-MULTIPLYEND: 		bez r0 &LOOPCONT
-
+MULTIPLYEND:    bez r0 &LOOPCONT
 # jump back to function call location
 
-
-
-DGN:						lli r7 0
+DGN:            lli r7 0
                 out r7  # quotient is zero because denominator is greater than numerator
                 out r1  # output numerator as the remainder
                 .halt
 
 
-.halt
+                .halt
 
