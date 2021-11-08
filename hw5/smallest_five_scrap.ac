@@ -1,0 +1,28 @@
+
+
+                # Find and store the 5 smallest elements in the results array
+FINDLOOP:       lw r4 r2 0  # load the first array element
+                lli r7 0  # array index counter
+FINDLOOPNEXT:   sub r5 r7 r3  # NEGATIVE number of loops left
+
+                lw r5 r2 0  # load the current array element
+                bez r5 &FINDLOOPCONT  # Continue if element was not already removed (-1)
+                bgz r5 &FINDLOOPCONT
+
+                # If the code is here, the element was already removed. So, we skip the current element
+                addi r2 r2 1  # increment the current array element
+                addi r7 r7 1  # increment the array index counter
+                bez r0 &FINDLOOPNEXT  # Jump to finding the next element
+FINDLOOPCONT:   sub r6 r4 r5  # smallest num - current num. If this is positive, current num is the new smallest num
+                bez r6 &FOUNDSMALL
+                addi r2 r2 1  # increment the current array element
+                addi r7 r7 1  # increment the array index counter
+                bez r0 &FINDLOOPNEXT  # Jump to finding the next element
+FOUNDSMALL:     ####
+
+
+FOUNDALL:       ####
+
+
+                # out results
+                .halt
