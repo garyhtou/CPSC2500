@@ -1,5 +1,6 @@
-# HW 5
-# Division
+# Gary Tou
+# HW 5, Division
+# Divides two numbers and prints out the quotient and remainder
 
                 in r1 # input numerator
                 in r2  # input denominator

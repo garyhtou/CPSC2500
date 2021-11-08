@@ -1,4 +1,6 @@
-# XOR
+# Gary Tou
+# HW5, XOR
+# `XOR`s two inputed numbers
 
 1. loop through all 16 digits
 2. for each digit, extract the digit by
