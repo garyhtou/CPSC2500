@@ -1,4 +1,6 @@
-# Smallest Five
+# Gary Tou
+# HW5, Smallest Five
+# Prints out the 5 smallest inputed numbers
 
 # ===== CODE =====
 
@@ -58,14 +60,15 @@ RLOOPBODY:      lli r4 &RESULT  # result array starting memory address. LOOP
                 # If the code is here, there are still loops left
                 bez r0 &DLOOP  # Jump to nested for loop (DLOOP is short for
                 # data array loop)
-RLOOPCONT:      sw r4 r1 0  # Store the small number in the current result array element
+RLOOPCONT:      sw r4 r1 0  # Store the small number in the current result array
+                # element
                 lli r5 -1  # Store -1 in the element index of the data array
                 # This signifies that the element has been removed (already used
                 # as one of the smallest numbners)
                 sw r5 r7 0
 
                 # Now that all of the data processing has been done of this
-                # results array index, let's increment and being the next loop
+                # results array index, let's increment and begin the next loop
                 # interation.
                 addi r1 r1 1  # increment the memory address of the result array
                 bez r0 &RLOOPBODY  # jump to next loop iteration
@@ -81,7 +84,7 @@ DLOOP:          lli r2 &ARR  # data array starting memory address
                 lli r7 -1 # default smallest number memory address
 DLOOPBODY:      lli r5 &ARR  # data array starting memory address. LOOP CHECK
                 # CONDITION
-                lli r5 &ARR
+                lui r5 &ARR
                 add r5 r5 r3  # data array ending memory address
                 sub r5 r2 r5  # loops left (negative)
                 bez r5 &DLOOPEND  # Jump if the loop is done
@@ -93,19 +96,29 @@ DLOOPBODY:      lli r5 &ARR  # data array starting memory address. LOOP CHECK
                 addi r5 r5 1  # add 1 to the number
                 bez r5 &DLOOPNEXT  # If this jump is made, it means that the
                 # current data array element is equal to -1. In otherwords, that
-                # element has been removed.
+                # element was previously removed.
 
                 # If the code is here, the current data array element was not
                 # removed. Therefore, we can consider it for whether it's the
                 # smallest number left in the data array.
                 lw r5 r2 0  # re-load the current data array element
-                sub r6 r4 r5  # If this r6 > 0, then we have a new smallest
-                # number.
+
+                # Initialize the smallest number if it is -1
+                lli r6 0
+                add r6 r6 r4
+                addi r6 r6 1  # Add one to the current smallest number
+                bez r6 &DLOOPNEW  # If a zero, set the current as the smallest
+
+                # Check if current number is actually smaller
+                sub r6 r4 r5  # If (smallest - current) > 0, then we have a new
+                # smallest number.
                 bgz r6 &DLOOPNEW  # Jump to setting the new smallest number
                 bez r0 &DLOOPNEXT  # Jump to the next loop iteration
-DLOOPNEW:       lli r4 0  # Set r4 (smallest) equal to r5 (current data array element)
+DLOOPNEW:       lli r4 0  # Set r4 (smallest) equal to r5 (current data array
+                # element)
                 add r4 r4 r5
-                lli r7 0  # Set r7 (smallest memory address) equal to r2 (current array element)
+                lli r7 0  # Set r7 (smallest memory address) equal to r2
+                # (current array element)
                 add r7 r7 r2
                 bez r0 &DLOOPNEXT  # Jump to the next loop iteration
 DLOOPNEXT:      addi r2 r2 1  # increment the memory address of the data array
@@ -124,7 +137,8 @@ LTFLOOP:        lw r4 r2 0  # load current element
                 addi r1 r1 1  # increment the loop counter
                 addi r2 r2 1  # increment the array element memory address
                 sub r5 r3 r1  # number of loops left
-                bgz r5 &LTFLOOP  # Jump to next iteration of loop if there are > 0 loops left
+                bgz r5 &LTFLOOP  # Jump to next iteration of loop if there
+                # are > 0 loops left
                 .halt  # stop program if there are no printing loops left
 
                 # PRINTFIVE prints out the full results array (5 elements)
