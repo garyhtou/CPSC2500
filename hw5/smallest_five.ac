@@ -59,13 +59,10 @@ RLOOPBODY:      lli r4 &RESULT  # result array starting memory address. LOOP
                 bez r0 &DLOOP  # Jump to nested for loop (DLOOP is short for
                 # data array loop)
 RLOOPCONT:      sw r4 r1 0  # Store the small number in the current result array element
-                lli r5 &ARR  # Get memory address of small element in data array
-                lui r5 &ARR  # r5 is the starting memory address of the data array
-                add r5 r5 r7  # add the element index to the starting memory address
-                lli r6 -1  # Store -1 in the element index of the data array
+                lli r5 -1  # Store -1 in the element index of the data array
                 # This signifies that the element has been removed (already used
                 # as one of the smallest numbners)
-                sw r6 r5 0
+                sw r5 r7 0
 
                 # Now that all of the data processing has been done of this
                 # results array index, let's increment and being the next loop
@@ -81,7 +78,7 @@ RLOOPEND:       bez r0 &PRINTFIVE  # Jump to print the five smallest numbers
 DLOOP:          lli r2 &ARR  # data array starting memory address
                 lui r2 &ARR  # will be incremented by the loop
                 lli r4 -1  # default smallest number
-                lli r7 -1 # default smallest number index
+                lli r7 -1 # default smallest number memory address
 DLOOPBODY:      lli r5 &ARR  # data array starting memory address. LOOP CHECK
                 # CONDITION
                 lli r5 &ARR
@@ -108,7 +105,7 @@ DLOOPBODY:      lli r5 &ARR  # data array starting memory address. LOOP CHECK
                 bez r0 &DLOOPNEXT  # Jump to the next loop iteration
 DLOOPNEW:       lli r4 0  # Set r4 (smallest) equal to r5 (current data array element)
                 add r4 r4 r5
-                lli r7 0  # Set r7 (smallest index) equal to r2 (current array element)
+                lli r7 0  # Set r7 (smallest memory address) equal to r2 (current array element)
                 add r7 r7 r2
                 bez r0 &DLOOPNEXT  # Jump to the next loop iteration
 DLOOPNEXT:      addi r2 r2 1  # increment the memory address of the data array
