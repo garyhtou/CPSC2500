@@ -1,17 +1,17 @@
-								in r2 # input numerator
-								in r3  # input denominator
+                in r2 # input numerator
+                in r3  # input denominator
 
 # === MULTIPLICATION FUNCTION ===
 # r3: multiplier (4)
 # r4: product (output) = 5+5+5+5
 # r5: counter
-MULTIPLYSTART:	lli r4 0  # Set output to zero
-								lli r5 0  # Set counter to zero
-MULTIPLYLOOP:		add r4 r4 r2  # add multiplicand (denominator) to output
-								addi r5 r5 1  # increment counter
-								sub r7 r3 r5  # loops iterations left
-								bez r7 &MULTIPLYEND  # if counter reaches multiplier, jump to end of loop
-								bez r0 &MULTIPLYLOOP  # unconditional jump to loop if end loop condition not yet (counter < multiplier)
-								# output is in r4
-MULTIPLYEND: 		out r4
-								.halt
+MULTIPLYSTART:  lli r4 0  # Set output to zero
+                lli r5 0  # Set counter to zero
+MULTIPLYLOOP:   add r4 r4 r2  # add multiplicand (denominator) to output
+                addi r5 r5 1  # increment counter
+                sub r7 r3 r5  # loops iterations left
+                bez r7 &MULTIPLYEND  # if counter reaches multiplier, jump to end of loop
+                bez r0 &MULTIPLYLOOP  # unconditional jump to loop if end loop condition not yet (counter < multiplier)
+                # output is in r4
+MULTIPLYEND:    out r4
+                .halt
