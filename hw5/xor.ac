@@ -2,49 +2,49 @@
 # HW5, XOR
 # `XOR`s two inputed numbers
 
-          in r1  # input first number
-          in r2  # input second number
+              in r1  # input first number
+              in r2  # input second number
 
-          # Validate first number
-          lli r3 0
-          sub r3 r3 r1
-          bez r3 &LEZERO  # Jump to print if first number is <= 0
-          bgz r3 &LEZERO
+              # Validate first number
+              lli r3 0
+              sub r3 r3 r1
+              bez r3 &PRINTLEZERO  # Jump to print if first number is <= 0
+              bgz r3 &PRINTLEZERO
 
-          # Validate second number
-          lli r3 0
-          sub r3 r3 r1
-          bez r3 &LEZERO  # Jump to print if second number is <= 0
-          bgz r3 &LEZERO
+              # Validate second number
+              lli r3 0
+              sub r3 r3 r1
+              bez r3 &PRINTLEZERO  # Jump to print if second number is <= 0
+              bgz r3 &PRINTLEZERO
 
-          # Now that the numbers have been validated, we can perform XOR (⊕).
-          # XOR can be performed as: A ⊕ B = AB̅ + A̅B
+              # Now that the numbers have been validated, we can perform XOR (⊕).
+              # XOR can be performed as: A ⊕ B = AB̅ + A̅B
 
-          # First, calculate B̅
-          lli r3 0
-          add r3 r3 r2
-          not r3 r3
+              # First, calculate B̅
+              lli r3 0
+              add r3 r3 r2
+              not r3 r3
 
-          # Then, perform AB̅
-          and r3 r3 r1
+              # Then, perform AB̅
+              and r3 r3 r1
 
-          # Next, calculate A̅
-          lli r4 0
-          add r4 r4 r1
-          not r4 r4
+              # Next, calculate A̅
+              lli r4 0
+              add r4 r4 r1
+              not r4 r4
 
-          # Then, perform A̅B
-          and r4 r4 r2
+              # Then, perform A̅B
+              and r4 r4 r2
 
-          # Finally, OR the two results together (AB̅ + A̅B)
-          or r5 r3 r4
+              # Finally, OR the two results together (AB̅ + A̅B)
+              or r5 r3 r4
 
-          # Print the result
-          out r5
-          .halt
+              # Print the result
+              out r5
+              .halt
 
 
 # Print function for if inputs are equal or less than zero
-LEZERO:   lli r3 -1
-          out r3
-          .halt
+PRINTLEZERO:  lli r3 -1
+              out r3
+              .halt
