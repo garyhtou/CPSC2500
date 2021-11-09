@@ -2,13 +2,49 @@
 # HW5, XOR
 # `XOR`s two inputed numbers
 
-1. loop through all 16 digits
-2. for each digit, extract the digit by
-	1. left shift 1 to digit position
-	2. AND with fist number
-	3. if result if > 0, then it's a 1. if = 0, it's a zero
-	4. do the same thing for the second number
-3. Now, we have the polarity of the two number for the current digit
-4. implement the XOR truth table (only need 3 conditions. check (0, 0) and (1, 1) BEFORE the others)
-5. Store the number to a result register by left shiting the single digit XOR result to the current digit position and ORing with result
-6. print result
+          in r1  # input first number
+          in r2  # input second number
+
+          # Validate first number
+          lli r3 0
+          sub r3 r3 r1
+          bez r3 &LEZERO  # Jump to print if first number is <= 0
+          bgz r3 &LEZERO
+
+          # Validate second number
+          lli r3 0
+          sub r3 r3 r1
+          bez r3 &LEZERO  # Jump to print if second number is <= 0
+          bgz r3 &LEZERO
+
+          # Now that the numbers have been validated, we can perform XOR (⊕).
+          # XOR can be performed as: A ⊕ B = AB̅ + A̅B
+
+          # First, calculate B̅
+          lli r3 0
+          add r3 r3 r2
+          not r3 r3
+
+          # Then, perform AB̅
+          and r3 r3 r1
+
+          # Next, calculate A̅
+          lli r4 0
+          add r4 r4 r1
+          not r4 r4
+
+          # Then, perform A̅B
+          and r4 r4 r2
+
+          # Finally, OR the two results together (AB̅ + A̅B)
+          or r5 r3 r4
+
+          # Print the result
+          out r5
+          .halt
+
+
+# Print function for if inputs are equal or less than zero
+LEZERO:   lli r3 -1
+          out r3
+          .halt

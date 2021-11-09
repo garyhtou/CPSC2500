@@ -1,0 +1,30 @@
+
+MYLOOP: int i = 0
+MYLOOPBODY:
+					if i < something.length
+
+					do stuff here
+
+					i++
+MYLOOPEND:
+
+------
+
+MYLOOP:int i = 0
+MYLOOPBODY:
+					if i < something.length
+
+					else bez r0 &MYLOOPEND
+
+					bez r0 &NESTEDLOOP
+MYLOOPCONT:
+					i++
+
+MYLOOPEND:
+
+NESTEDLOOP: int j = 0
+NESTEDLOOPBODY:
+							if j < somethingelse.length
+							 do something
+							 j++
+NESTEDLOOPEND: bez r0 &MYLOOPCONT
